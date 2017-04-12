@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="main.css" media="screen">
+
+    <!-- LOAD THE GOOGL CHARTS LIBRARY -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = new google.visualization.DataTable();
+          data.addColumn('string', 'Date');
+          data.addColumn('number', 'Price');
+
+          data.addRows([
+                  // Instead of plugging in the values manually, or reading them
+                  // from a Data Source like Google Spreadsheets, feed them in
+                  // using Jinja, the templating system Flask uses.
+                  // Each iteration evaluates to something like this:
+                  // ['Saturday', 28],
+                  {%- for obs in stock_data %} 
+                    ['{{ obs[0] }}', {{ obs[1] }}],
+                  {%- endfor %}
+
+          ]);
+
+        var options = {
+          title: 'Stock Price',
+          curveType: 'none',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+    </script>
+
+    <title>Forecasting</title>
+  </head>
+  
+<!-- HTML BODY -->
+  <body>
+    <div class="container text-xs-center">
+      <h1 class="display-1">Forecasting With Machine Learning</h1>
+      <br>
+      <br>
+      <br>
+      <p class="lead">Let's forecast stock prices using various machine learning algorithms.</p>
+      <p>Please enter a stock ticker symbol</p>
+    </div>
+
+    <!-- THIS IS THE GOOGLE CHART -->
+    <div class="container">
+      <div class="row">
+        <div class=col-sm-2></div>
+        <div class=col-sm-8>
+        <div id="curve_chart" style="width: 900px; height: 500px"></div>
+        </div>
+        <div class=col-sm-2></div>
+      </div>
+    </div>
+
+    <!-- jQuery first, then Tether, then Bootstrap JS. -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js" integrity="sha384-3ceskX3iaEnIogmQchP8opvBy3Mi7Ce34nWjpBIwVTHfGYWQS9jwHDVRnpKKHJg7" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.7/js/tether.min.js" integrity="sha384-XTs3FgkjiBgo8qjEjBk0tGmf3wPrWtA6coPfQDfFEY8AnYJwjalXCiosYRBIBZX8" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/js/bootstrap.min.js" integrity="sha384-BLiI7JTZm+JWlgKa0M0kGRpJbF2J8q+qreVrKBC47e3K6BW78kGLrCkeRX6I9RoK" crossorigin="anonymous"></script>
+  </body>
+</html>
